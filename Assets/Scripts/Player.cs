@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,30 +7,25 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     public event Action OnPlayerTakedDamage;
-    [Space]
+
+    [Header("Player Parameters")]
     public float moveSpeed = 10;
     public int playerHealth;
     public int playerHealthMax = 60;
-    [Space]
-    private Rigidbody2D rb;
-    private Animator animator;
     private Vector2 moveInput;
     private Vector2 moveVelocity;
-    private bool isFacingRight;
-    [Space]
-    //[SerializeField] private CinemachineVirtualCamera cinemachineCamera;
+    public bool isFacingRight;
+    
+    [Header("References")]
     [SerializeField] private GameObject effect;
+    private Rigidbody2D rb;
+    private Animator animator;
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        if (instance is null) instance = this;
     }
     void Start()
     {
-        playerHealth = playerHealthMax;
-        //cinemachineCamera = GetComponent<CinemachineVirtualCamera>();
         playerHealth = playerHealthMax;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -45,38 +39,21 @@ public class Player : MonoBehaviour
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * moveSpeed;
 
-        if(moveInput.x == 0)
-        {
-            animator.SetBool("Walking", false);
-        }
-        else
-        {
-            animator.SetBool("Walking", true);
-        }
-        if (moveInput.x == 0 && moveInput.y == 0)
-        {
-            animator.SetBool("Walking", false);
-        }
-        else
-        {
-            animator.SetBool("Walking", true);
-        }
+        if(moveInput.x == 0) animator.SetBool("Walking", false);
+        else animator.SetBool("Walking", true);
+
+        if (moveInput.x == 0 && moveInput.y == 0) animator.SetBool("Walking", false);
+        else animator.SetBool("Walking", true);
         Flip(moveInput.x);
     }
     public void PlayerTakeDamage(int damage)
     {
-        
         playerHealth -= damage;
         OnPlayerTakedDamage?.Invoke();
         Instantiate(effect, transform.position, Quaternion.identity);
-        if (playerHealth <= 0)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        else
-        {
-            StartCoroutine(IFrames());
-        }
+
+        if (playerHealth <= 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        else StartCoroutine(IFrames());
     }
     IEnumerator IFrames()
     {

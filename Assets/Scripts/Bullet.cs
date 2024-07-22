@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     public float lifetime = 2f;
+    private bool canDamagePlayer = true;
     [SerializeField] private int damage = 1;
     [SerializeField] private bool enemyBullet;
-    private bool canDamagePlayer = true;
     void Start()
     {
         Destroy(gameObject, lifetime);
     }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy") && !enemyBullet)

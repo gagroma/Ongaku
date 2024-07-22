@@ -1,30 +1,29 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     private enum EnemyType { Attacking, Shooting, Mage }
-    [SerializeField] private EnemyType enemyType;
 
+    [Header("Enemy Parameters")]
+    [SerializeField] private EnemyType enemyType;
     [SerializeField] private int enemyHealth = 3;
-    public int enemyDmg;
     [SerializeField] private float enemySpeed;
-    [Space]
-    private float nextFireTime;
-    [Space]
-    [SerializeField] private GameObject deathEffect;
-    [Space]
-    public float enemyAttackRange = 2f;
+    [SerializeField] private bool canMove=true;
+    public int enemyDmg;
     public float enemyAttackCooldown = 2f;
+    public float enemyAttackRange = 2f;
+    private float nextFireTime;
     private bool isAttacking = false;
     private bool isCooldown = false;
     private bool canDamagePlayer = true;
-    private Transform playerTransform;
-    [SerializeField] private bool canMove=true;
     private bool isFacingRight = true;
+
+    [Header("References")]
+    [SerializeField] private GameObject deathEffect;
     private Animator animator;
+    private Transform playerTransform;
+    
     void Start()
     {
         canMove = true;
@@ -33,10 +32,7 @@ public class Enemy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (canMove)
-        {
-            EnemyMovement();
-        }
+        if (canMove) EnemyMovement();
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -48,9 +44,7 @@ public class Enemy : MonoBehaviour
                 canDamagePlayer = false;
                 canMove = false;
                 Invoke(nameof(ResetDamageFlag), 1f);
-
             }
-
         }
     }
     void Update()
@@ -118,14 +112,8 @@ public class Enemy : MonoBehaviour
             case EnemyType.Mage:
                 break;
         }
-        if (transform.position.x < playerTransform.position.x && !isFacingRight)
-        {
-            Flip();
-        }
-        else if (transform.position.x > playerTransform.position.x && isFacingRight)
-        {
-            Flip();
-        }
+        if (transform.position.x < playerTransform.position.x && !isFacingRight) Flip();
+        else if (transform.position.x > playerTransform.position.x && isFacingRight) Flip();
     }
     private IEnumerator AttackCooldown()
     {
@@ -133,16 +121,12 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(enemyAttackCooldown);
         isCooldown = false;
     }
-
     private IEnumerator Attack()
     {
         isAttacking = true;
-
         Instantiate(deathEffect, playerTransform.position, Quaternion.identity);
         Player.instance.PlayerTakeDamage(enemyDmg);
-
         yield return new WaitForSeconds(1f);
-
         isAttacking = false;
     }
     private void ResetDamageFlag()

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,10 +46,7 @@ public class HealthBar : MonoBehaviour
     }
     public void ClearHearts()
     {
-        foreach (Transform t in transform)
-        {
-            Destroy(t.gameObject);
-        }
+        foreach (Transform t in transform) Destroy(t.gameObject);
         hearts = new List<HealthSystem>();
     }
 }

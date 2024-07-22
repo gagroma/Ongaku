@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ public class BulletPool : MonoBehaviour
     {
         instance = this;
     }
-
     private void Start()
     {
         bullets = new List<GameObject>();
@@ -37,9 +35,5 @@ public class BulletPool : MonoBehaviour
             return bul;
         }
         return null;
-    }
-    void Update()
-    {
-        
     }
 }
