@@ -6,6 +6,6 @@ public class BulletCount : MonoBehaviour
     [SerializeField] TextMeshProUGUI textMeshPro;
     private void Update()
     {
-        textMeshPro.text = Pistol.instance.currentBulletCount.ToString();
+        textMeshPro.text = Weapon.instance.currentBulletCount.ToString();
     }
 }

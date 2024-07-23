@@ -457,14 +457,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 0
-  bulletPrefab: {fileID: 8025132968842164593, guid: 21e842c61ffa8df43991e2968c6766e3, type: 3}
   bulletSpawnPoint: {fileID: 1712090472}
   bulletSpeed: 20
   shootCooldown: 0.2
-  isReloading: 0
   reloadTime: 1
-  maxBulletCount: 6
+  maxBulletCount: 10
+  shootingMode: 0
   currentBulletCount: 0
+  isReloading: 0
+  shotgunReloadTime: 1.7
+  shotgunPelletCount: 5
+  shotgunSpreadAngle: 35
+  burstCount: 3
+  burstDelay: 0.3
+  bulletPrefab: {fileID: 8025132968842164593, guid: 21e842c61ffa8df43991e2968c6766e3, type: 3}
 --- !u!212 &244584260
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1242,12 +1248,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyHealth: 10
-  enemyDmg: 1
   enemySpeed: 2
-  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
-  enemyAttackRange: 2
-  enemyAttackCooldown: 2
   canMove: 1
+  enemyDmg: 1
+  enemyAttackCooldown: 2
+  enemyAttackRange: 2
+  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!50 &577052627
 Rigidbody2D:
   serializedVersion: 5
@@ -1679,12 +1685,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   enemyHealth: 10
-  enemyDmg: 1
   enemySpeed: 2
-  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
-  enemyAttackRange: 2
-  enemyAttackCooldown: 1
   canMove: 1
+  enemyDmg: 1
+  enemyAttackCooldown: 1
+  enemyAttackRange: 2
+  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!50 &803986355
 Rigidbody2D:
   serializedVersion: 5
@@ -2506,6 +2512,7 @@ MonoBehaviour:
   moveSpeed: 5
   playerHealth: 3
   playerHealthMax: 6
+  isFacingRight: 0
   effect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!4 &1187171429
 Transform:
@@ -3021,12 +3028,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyHealth: 10
-  enemyDmg: 1
   enemySpeed: 2
-  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
-  enemyAttackRange: 2
-  enemyAttackCooldown: 2
   canMove: 1
+  enemyDmg: 1
+  enemyAttackCooldown: 2
+  enemyAttackRange: 2
+  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!50 &1279889503
 Rigidbody2D:
   serializedVersion: 5
@@ -3140,14 +3147,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 1
-  bulletPrefab: {fileID: 8025132968842164593, guid: e741f5a5243669b4092ba1d3ab373b02, type: 3}
   bulletSpawnPoint: {fileID: 1206614889}
   bulletSpeed: 10
   shootCooldown: 2
-  isReloading: 0
   reloadTime: 1
   maxBulletCount: 6
+  shootingMode: 0
   currentBulletCount: 0
+  isReloading: 0
+  shotgunReloadTime: 1
+  shotgunPelletCount: 6
+  shotgunSpreadAngle: 10
+  burstCount: 3
+  burstDelay: 0.1
+  bulletPrefab: {fileID: 8025132968842164593, guid: e741f5a5243669b4092ba1d3ab373b02, type: 3}
 --- !u!1 &1443813961
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,12 +3491,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyHealth: 10
-  enemyDmg: 1
   enemySpeed: 2
-  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
-  enemyAttackRange: 2
-  enemyAttackCooldown: 2
   canMove: 1
+  enemyDmg: 1
+  enemyAttackCooldown: 2
+  enemyAttackRange: 2
+  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!50 &1596346732
 Rigidbody2D:
   serializedVersion: 5
@@ -4092,7 +4105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 296.93, y: -99.600006}
+  m_AnchoredPosition: {x: 296.93, y: -99.599976}
   m_SizeDelta: {x: 377.51, y: 93.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1940222949
@@ -4262,12 +4275,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemyHealth: 10
-  enemyDmg: 1
   enemySpeed: 2
-  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
-  enemyAttackRange: 2
-  enemyAttackCooldown: 2
   canMove: 1
+  enemyDmg: 1
+  enemyAttackCooldown: 2
+  enemyAttackRange: 2
+  deathEffect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!50 &2010484286
 Rigidbody2D:
   serializedVersion: 5

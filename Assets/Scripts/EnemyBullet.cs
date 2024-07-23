@@ -13,13 +13,11 @@ public class EnemyBullet : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, lifeTime);
     }
-
     private void Update()
     {
         // Move the bullet in the forward direction
         rb.linearVelocity = transform.right * bulletSpeed;
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

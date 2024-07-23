@@ -9,42 +9,48 @@ public class Player : MonoBehaviour
     public event Action OnPlayerTakedDamage;
 
     [Header("Player Parameters")]
-    public float moveSpeed = 10;
+    public float moveSpeed = 10f;
     public int playerHealth;
     public int playerHealthMax = 60;
     private Vector2 moveInput;
     private Vector2 moveVelocity;
-    public bool isFacingRight;
-    
+    public bool isFacingRight = true;
+
     [Header("References")]
     [SerializeField] private GameObject effect;
     private Rigidbody2D rb;
     private Animator animator;
+
     private void Awake()
     {
-        if (instance is null) instance = this;
+        if (instance is null)
+            instance = this;
     }
-    void Start()
+    private void Start()
     {
         playerHealth = playerHealthMax;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
+    private void Update()
+    {
+        HandleMovement();
+        HandleAnimation();
+    }
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + moveVelocity * Time.deltaTime);
     }
-    private void Update()
+    private void HandleMovement()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         moveVelocity = moveInput.normalized * moveSpeed;
-
-        if(moveInput.x == 0) animator.SetBool("Walking", false);
-        else animator.SetBool("Walking", true);
-
-        if (moveInput.x == 0 && moveInput.y == 0) animator.SetBool("Walking", false);
-        else animator.SetBool("Walking", true);
         Flip(moveInput.x);
+    }
+    private void HandleAnimation()
+    {
+        bool isWalking = moveInput != Vector2.zero;
+        animator.SetBool("Walking", isWalking);
     }
     public void PlayerTakeDamage(int damage)
     {
@@ -55,27 +61,19 @@ public class Player : MonoBehaviour
         if (playerHealth <= 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         else StartCoroutine(IFrames());
     }
-    IEnumerator IFrames()
+    private IEnumerator IFrames()
     {
-        Physics2D.IgnoreLayerCollision(3, 7);
-        yield return new WaitForSeconds(1);
+        Physics2D.IgnoreLayerCollision(3, 7, true);
+        yield return new WaitForSeconds(1f);
         Physics2D.IgnoreLayerCollision(3, 7, false);
     }
-    public void Flip(float direction)
+    private void Flip(float direction)
     {
-        if (direction > 0f && !isFacingRight)
+        if ((direction > 0f && !isFacingRight) || (direction < 0f && isFacingRight))
         {
-            isFacingRight = true;
+            isFacingRight = !isFacingRight;
             Vector3 scaler = transform.localScale;
-            scaler.x = Mathf.Abs(scaler.x);
-            transform.localScale = scaler;
-        }
-
-        else if (direction < 0f && isFacingRight)
-        {
-            isFacingRight = false;
-            Vector3 scaler = transform.localScale;
-            scaler.x = -Mathf.Abs(scaler.x);
+            scaler.x *= -1;
             transform.localScale = scaler;
         }
     }
