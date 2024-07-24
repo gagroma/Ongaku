@@ -1049,8 +1049,8 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
+    width: 2
+    height: 2
   near clip plane: -0.01
   far clip plane: 1000.04
   field of view: 60
@@ -2512,7 +2512,7 @@ MonoBehaviour:
   moveSpeed: 5
   playerHealth: 3
   playerHealthMax: 6
-  isFacingRight: 0
+  isFacingRight: 1
   effect: {fileID: 61994282036279730, guid: d14381aaac7c36f478bca85ec514debb, type: 3}
 --- !u!4 &1187171429
 Transform:

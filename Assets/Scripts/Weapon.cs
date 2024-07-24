@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
     public static Weapon instance;
 
     public enum GunType { Player, Enemy };
-    public enum ShootingMode { Single, Shotgun, Auto, Burst };
+    public enum ShootingMode { Single, Shotgun, Auto};
 
     [Header("Gun Type")]
     public GunType gunType;
@@ -55,7 +55,7 @@ public class Weapon : MonoBehaviour
             HandlePlayerInput();
 
         else if (gunType == GunType.Enemy)
-            AimAtPlayer();
+            HandleEnemyShooting();
     }
     private void HandlePlayerInput()
     {
@@ -82,27 +82,37 @@ public class Weapon : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
+    private void HandleEnemyShooting()
+    {
+        if (canShoot && !isReloading)
+        {
+            Shoot();
+            StartCoroutine(ShootCooldown(shootCooldown));
+        }
+    }
     private void Shoot()
     {
         switch (shootingMode)
         {
             case ShootingMode.Single:
-                FireBullet();
+                SingleMode();
+                currentBulletCount--;
                 break;
             case ShootingMode.Shotgun:
                 ShotgunMode();
+                currentBulletCount = Mathf.Max(0, currentBulletCount - shotgunPelletCount);
                 break;
             case ShootingMode.Auto:
-                StartCoroutine(AutoShoot());
+                StartCoroutine(AutoMode());
                 break;
-            case ShootingMode.Burst:
-                StartCoroutine(BurstShoot());
-                break;
+            //case ShootingMode.Burst:
+            //    StartCoroutine(BurstMode());
+            //    break;
         }
-
-        currentBulletCount = (shootingMode == ShootingMode.Shotgun) ? shotgunPelletCount> currentBulletCount? 0 : currentBulletCount-shotgunPelletCount : currentBulletCount - 1;
     }
-    private void FireBullet()
+
+    #region Shooting Modes
+    private void SingleMode()
     {
         Vector2 direction = (gunType == GunType.Player) ? GetMouseDirection() : GetPlayerDirection();
         CreateBullet(direction);
@@ -116,25 +126,29 @@ public class Weapon : MonoBehaviour
             CreateBullet(direction);
         }
     }
-    private IEnumerator AutoShoot()
+    private IEnumerator AutoMode()
     {
         while (Input.GetButton("Fire1") && currentBulletCount > 0)
         {
-            FireBullet();
+            SingleMode();
             currentBulletCount--;
             yield return new WaitForSeconds(shootCooldown);
         }
     }
-    private IEnumerator BurstShoot()
-    {
-        for (int i = 0; i < burstCount; i++)
-        {
-            if (currentBulletCount <= 0) break;
-            FireBullet();
-            currentBulletCount--;
-            yield return new WaitForSeconds(burstDelay);
-        }
-    }
+    //private IEnumerator BurstMode()
+    //{
+    //    canShoot = false;
+    //    for (int i = 0; i < burstCount; i++)
+    //    {
+    //        if (currentBulletCount <= 0) break;
+
+    //        SingleMode();
+    //        currentBulletCount--;
+    //        yield return new WaitForSeconds(burstDelay);
+    //    }
+    //    canShoot = true;
+    //}
+    #endregion
     private IEnumerator ShootCooldown(float cooldownTime)
     {
         canShoot = false;
