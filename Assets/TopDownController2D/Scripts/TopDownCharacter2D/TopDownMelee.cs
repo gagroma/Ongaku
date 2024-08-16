@@ -34,10 +34,8 @@ namespace TopDownCharacter2D
 
         private void Attack(AttackConfig config)
         {
-            if (!(config is MeleeAttackConfig))
-            {
+            if (config is not MeleeAttackConfig)
                 return;
-            }
 
             InstantiateAttack((MeleeAttackConfig) config);
         }

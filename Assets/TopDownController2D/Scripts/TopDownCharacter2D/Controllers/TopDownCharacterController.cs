@@ -27,11 +27,11 @@ namespace TopDownCharacter2D.Controllers
         }
 
         /// <summary>
-        ///     Only trigger a attack event when the attack delay is over
+        ///     Only trigger an attack event when the attack delay is over
         /// </summary>
         private void HandleAttackDelay()
         {
-            if (Stats.CurrentStats.attackConfig == null)
+            if (Stats.CurrentStats.attackConfig is null)
             {
                 return;
             }
@@ -41,11 +41,9 @@ namespace TopDownCharacter2D.Controllers
                 _timeSinceLastAttack += Time.deltaTime;
             }
 
-            if (IsAttacking && _timeSinceLastAttack > Stats.CurrentStats.attackConfig.delay)
-            {
-                _timeSinceLastAttack = 0f;
-                onAttackEvent.Invoke(Stats.CurrentStats.attackConfig);
-            }
+            if (!IsAttacking || !(_timeSinceLastAttack > Stats.CurrentStats.attackConfig.delay)) return;
+            _timeSinceLastAttack = 0f;
+            onAttackEvent.Invoke(Stats.CurrentStats.attackConfig);
         }
 
         #region Events

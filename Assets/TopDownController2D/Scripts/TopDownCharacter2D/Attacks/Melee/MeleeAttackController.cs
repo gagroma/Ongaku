@@ -8,7 +8,7 @@ namespace TopDownCharacter2D.Attacks.Melee
     /// </summary>
     public class MeleeAttackController : MonoBehaviour
     {
-        private MeleeAttackConfig attackConfig;
+        private MeleeAttackConfig _attackConfig;
         private Vector3 _endPosition;
         private Quaternion _endRotation;
         private bool _isReady;
@@ -19,41 +19,34 @@ namespace TopDownCharacter2D.Attacks.Melee
 
         private Transform _transform;
 
-        private void Update()
+        private void Update()   
         {
-            if (!_isReady)
-            {
-                return;
-            }
-
+            if (!_isReady) return;
             _timeActive += Time.deltaTime;
 
             //  Destroy the attack after the time of the attack speed
-            if (_timeActive > attackConfig.speed)
+            if (_timeActive > _attackConfig.speed)
             {
                 DestroyAttack();
             }
 
             // Apply the swing and thrust transformations
             _transform.localRotation = Quaternion.Lerp(_startRotation, _endRotation,
-                attackConfig.swingCurve.Evaluate(_timeActive / attackConfig.speed));
+                _attackConfig.swingCurve.Evaluate(_timeActive / _attackConfig.speed));
             _transform.localPosition = _transform.localRotation * Vector3.Lerp(_startPosition, _endPosition,
-                attackConfig.thrustCurve.Evaluate(_timeActive / attackConfig.speed));
+                _attackConfig.thrustCurve.Evaluate(_timeActive / _attackConfig.speed));
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (attackConfig.target.value == (attackConfig.target.value | (1 << other.gameObject.layer)))
+            if (_attackConfig.target.value == (_attackConfig.target.value | (1 << other.gameObject.layer)))
             {
                 HealthSystem health = other.gameObject.GetComponent<HealthSystem>();
-                if (health != null)
+                if (health is not null)
                 {
-                    health.ChangeHealth(-attackConfig.power);
+                    health.ChangeHealth(-_attackConfig.power);
                     TopDownKnockBack knockBack = other.gameObject.GetComponent<TopDownKnockBack>();
-                    if (knockBack != null)
-                    {
-                        knockBack.ApplyKnockBack(transform);
-                    }
+                    knockBack?.ApplyKnockBack(transform);
                 }
             }
         }
@@ -65,7 +58,7 @@ namespace TopDownCharacter2D.Attacks.Melee
         public void InitializeAttack(MeleeAttackConfig attackConfig)
         {
             _transform = transform;
-            this.attackConfig = attackConfig;
+            this._attackConfig = attackConfig;
 
             ComputeSwingRotations();
             ComputeThrustPositions();
@@ -84,8 +77,8 @@ namespace TopDownCharacter2D.Attacks.Melee
         private void ComputeSwingRotations()
         {
             Quaternion rotation = _transform.rotation;
-            _startRotation = rotation * Quaternion.Euler(0, 0, -attackConfig.swingAngle);
-            _endRotation = rotation * Quaternion.Euler(0, 0, attackConfig.swingAngle);
+            _startRotation = rotation * Quaternion.Euler(0, 0, -_attackConfig.swingAngle);
+            _endRotation = rotation * Quaternion.Euler(0, 0, _attackConfig.swingAngle);
         }
 
         /// <summary>
@@ -95,7 +88,7 @@ namespace TopDownCharacter2D.Attacks.Melee
         {
             Vector3 position = _transform.localPosition;
             _startPosition = position;
-            _endPosition = position + new Vector3(attackConfig.thrustDistance, 0, 0);
+            _endPosition = position + new Vector3(_attackConfig.thrustDistance, 0, 0);
         }
 
         /// <summary>
@@ -103,7 +96,7 @@ namespace TopDownCharacter2D.Attacks.Melee
         /// </summary>
         private void ScaleAttack()
         {
-            transform.localScale = new Vector3(attackConfig.size, attackConfig.size, attackConfig.size);
+            transform.localScale = new Vector3(_attackConfig.size, _attackConfig.size, _attackConfig.size);
         }
 
         /// <summary>
